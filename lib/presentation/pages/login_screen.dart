@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nodelabs_movie/config/theme/app_color.dart';
 import 'package:nodelabs_movie/config/theme/app_theme.dart';
+import 'package:nodelabs_movie/injection_container.dart';
+import 'package:nodelabs_movie/presentation/blocs/bottom_navigation/bottom_navigation_bloc.dart';
 import 'package:nodelabs_movie/presentation/pages/main_screen.dart';
 import 'package:nodelabs_movie/presentation/pages/register_screen.dart';
 import 'package:nodelabs_movie/presentation/widgets/social_button.dart';
@@ -89,7 +92,11 @@ class LoginScreen extends StatelessWidget {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const MainScreen(),
+                            builder: (context) =>
+                                BlocProvider<BottomNavigationBloc>(
+                              create: (context) => getIt(),
+                              child: const MainScreen(),
+                            ),
                           ),
                           (route) => false,
                         );
