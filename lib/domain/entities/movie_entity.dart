@@ -6,6 +6,7 @@ class MovieEntity extends Equatable {
   final String? plot;
   final String? poster;
   final String? year;
+  final List<dynamic>? images;
   final bool? isFavorite;
 
   const MovieEntity({
@@ -14,6 +15,7 @@ class MovieEntity extends Equatable {
     this.plot,
     this.poster,
     this.year,
+    this.images,
     this.isFavorite,
   });
 
@@ -25,6 +27,7 @@ class MovieEntity extends Equatable {
       plot,
       poster,
       year,
+      images,
       isFavorite,
     ];
   }

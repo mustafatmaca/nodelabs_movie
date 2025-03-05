@@ -64,6 +64,45 @@ class _MovieServices implements MovieServices {
     return httpResponse;
   }
 
+  @override
+  Future<HttpResponse<List<MovieModel>>> getMovies({int? page}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'page': page};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{
+      'Authorization': await _secureStorage.read(key: 'jwt_token')
+    };
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<HttpResponse<List<MovieModel>>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/movie/list',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late List<MovieModel> _value;
+    try {
+      _value = (_result.data!['data']['movies'] as List<dynamic>)
+          .map((dynamic i) => MovieModel.fromMap(i as Map<String, dynamic>))
+          .toList();
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

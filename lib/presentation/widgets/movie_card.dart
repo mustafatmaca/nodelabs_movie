@@ -1,9 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nodelabs_movie/config/theme/app_theme.dart';
+import 'package:nodelabs_movie/domain/entities/movie_entity.dart';
 
 class MovieCard extends StatelessWidget {
+  final MovieEntity movie;
   const MovieCard({
     super.key,
+    required this.movie,
   });
 
   @override
@@ -15,8 +19,8 @@ class MovieCard extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage('assets/images/bottom_sheet_bg.png'))),
+                  fit: BoxFit.contain,
+                  image: CachedNetworkImageProvider(movie.images![0]))),
         ),
         Positioned(
           bottom: 100,
@@ -31,7 +35,9 @@ class MovieCard extends StatelessWidget {
             ),
             child: Center(
               child: Icon(
-                Icons.favorite,
+                movie.isFavorite == true
+                    ? Icons.favorite
+                    : Icons.favorite_border,
               ),
             ),
           ),
@@ -79,11 +85,11 @@ class MovieCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Günahkar Adam",
+                      movie.title!,
                       style: AppTheme.theme.textTheme.displaySmall,
                     ),
                     Text(
-                      "Community every territories dogpile so. Last they investigation model",
+                      movie.plot!,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: AppTheme.theme.textTheme.titleMedium,

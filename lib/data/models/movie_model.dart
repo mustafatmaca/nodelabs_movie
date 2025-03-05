@@ -9,6 +9,7 @@ class MovieModel extends MovieEntity {
     String? plot,
     String? poster,
     String? year,
+    List<dynamic>? images,
     bool? isFavorite,
   }) : super(
             id: id,
@@ -16,6 +17,7 @@ class MovieModel extends MovieEntity {
             plot: plot,
             poster: poster,
             year: year,
+            images: images,
             isFavorite: isFavorite);
 
   factory MovieModel.fromMap(Map<String, dynamic> map) {
@@ -25,6 +27,7 @@ class MovieModel extends MovieEntity {
       plot: map['Plot'],
       poster: map['Poster'],
       year: map['Year'],
+      images: map['Images'],
       isFavorite: map['isFavorite'],
     );
   }
@@ -39,6 +42,7 @@ class MovieModel extends MovieEntity {
       plot: entity.plot,
       poster: entity.poster,
       year: entity.year,
+      images: entity.images,
       isFavorite: entity.isFavorite,
     );
   }

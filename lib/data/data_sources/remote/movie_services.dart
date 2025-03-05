@@ -15,4 +15,9 @@ abstract class MovieServices {
 
   @GET('/movie/favorites')
   Future<HttpResponse<List<MovieModel>>> getFavoriteMovies();
+
+  @GET('/movie/list')
+  Future<HttpResponse<List<MovieModel>>> getMovies({
+    @Query('page') int? page,
+  });
 }
