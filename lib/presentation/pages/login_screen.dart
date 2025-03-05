@@ -7,6 +7,7 @@ import 'package:nodelabs_movie/presentation/blocs/bottom_navigation/bottom_navig
 import 'package:nodelabs_movie/presentation/blocs/login/login_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/login/login_event.dart';
 import 'package:nodelabs_movie/presentation/blocs/login/login_state.dart';
+import 'package:nodelabs_movie/presentation/blocs/register/register_bloc.dart';
 import 'package:nodelabs_movie/presentation/pages/main_screen.dart';
 import 'package:nodelabs_movie/presentation/pages/register_screen.dart';
 import 'package:nodelabs_movie/presentation/widgets/social_button.dart';
@@ -199,7 +200,10 @@ class LoginScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const RegisterScreen(),
+                                        BlocProvider<RegisterBloc>(
+                                      create: (context) => getIt(),
+                                      child: RegisterScreen(),
+                                    ),
                                   ));
                             },
                             child: Text(

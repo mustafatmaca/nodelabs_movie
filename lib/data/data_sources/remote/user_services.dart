@@ -17,4 +17,9 @@ abstract class UserServices {
   Future<HttpResponse<UserModel>> login({
     @Body() Map<String, dynamic>? userInfo,
   });
+
+  @POST('/user/register')
+  Future<HttpResponse<UserModel>> register({
+    @Body() Map<String, dynamic>? userInfo,
+  });
 }

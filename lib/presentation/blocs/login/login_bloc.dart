@@ -7,7 +7,7 @@ import 'package:nodelabs_movie/presentation/blocs/login/login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUseCase _loginUseCase;
   LoginBloc(this._loginUseCase) : super(LoginInitial()) {
-    on<LoginEvent>((event, emit) async {
+    on<Login>((event, emit) async {
       final dataState = await _loginUseCase(
           params: {'email': event.email, 'password': event.password});
 

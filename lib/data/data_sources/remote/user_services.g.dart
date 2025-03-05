@@ -15,7 +15,7 @@ class _UserServices implements UserServices {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= apiBaseUrl;
+    baseUrl ??= 'https://caseapi.nodelabs.dev';
   }
 
   final Dio _dio;
@@ -43,6 +43,45 @@ class _UserServices implements UserServices {
         .compose(
           _dio.options,
           '/user/login',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late UserModel _value;
+    try {
+      await _secureStorage.write(
+          key: 'jwt_token', value: _result.data!['data']['token']);
+      _value = UserModel.fromMap(_result.data!['data']);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<UserModel>> register(
+      {Map<String, dynamic>? userInfo}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(userInfo!);
+    final _options = _setStreamType<HttpResponse<UserModel>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/user/register',
           queryParameters: queryParameters,
           data: _data,
         )
