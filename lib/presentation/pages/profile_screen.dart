@@ -3,8 +3,12 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nodelabs_movie/config/theme/app_color.dart';
 import 'package:nodelabs_movie/config/theme/app_theme.dart';
 import 'package:nodelabs_movie/domain/entities/user_entity.dart';
+import 'package:nodelabs_movie/presentation/blocs/favorite_movies/favorite_movies_bloc.dart';
+import 'package:nodelabs_movie/presentation/blocs/favorite_movies/favorite_movies_event.dart';
+import 'package:nodelabs_movie/presentation/blocs/favorite_movies/favorite_movies_state.dart';
 import 'package:nodelabs_movie/presentation/blocs/upload_photo/upload_photo_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/upload_photo/upload_photo_state.dart';
 import 'package:nodelabs_movie/presentation/pages/photo_screen.dart';
@@ -404,16 +408,43 @@ class ProfileScreen extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.02,
               ),
               Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 0.6,
-                  ),
-                  itemCount: 9,
-                  itemBuilder: (context, index) {
-                    return FavoriteMovie();
+                child: BlocBuilder<FavoriteMoviesBloc, FavoriteMoviesState>(
+                  builder: (context, state) {
+                    if (state is FavoriteMoviesInitial) {
+                      context
+                          .read<FavoriteMoviesBloc>()
+                          .add(GetFavoriteMovies());
+                    }
+                    if (state is FavoriteMoviesLoaded) {
+                      return GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 0.6,
+                        ),
+                        itemCount: state.favoriteMovies!.length,
+                        itemBuilder: (context, index) {
+                          return FavoriteMovie(
+                            movie: state.favoriteMovies![index],
+                          );
+                        },
+                      );
+                    }
+                    if (state is FavoriteMoviesFailed) {
+                      Center(
+                        child: Text(
+                          'Bir hata oluştu!',
+                          style: AppTheme.theme.textTheme.headlineLarge,
+                        ),
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.primary,
+                      ),
+                    );
                   },
                 ),
               )
