@@ -1,13 +1,17 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nodelabs_movie/config/theme/app_theme.dart';
+import 'package:nodelabs_movie/domain/entities/user_entity.dart';
 import 'package:nodelabs_movie/presentation/pages/photo_screen.dart';
 import 'package:nodelabs_movie/presentation/widgets/discount_card.dart';
 import 'package:nodelabs_movie/presentation/widgets/favorite_movie.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final UserEntity user;
+
+  const ProfileScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -322,27 +326,42 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Text(
-                          "U",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold),
+                      CircleAvatar(
+                          child: user.photoUrl != null
+                              ? CachedNetworkImage(
+                                  imageUrl: user.photoUrl!,
+                                  placeholder: (context, url) =>
+                                      Text(user.name![0]),
+                                  errorWidget: (context, url, error) =>
+                                      const Text('U'),
+                                )
+                              : const Text('U')),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.03,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            user.name != null
+                                ? Text(user.name!,
+                                    style:
+                                        AppTheme.theme.textTheme.headlineLarge)
+                                : Text('User Name',
+                                    style:
+                                        AppTheme.theme.textTheme.headlineLarge),
+                            user.id != null
+                                ? Text(
+                                    "ID: ${user.id}",
+                                    style: AppTheme.theme.textTheme.labelMedium,
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : Text("ID: ",
+                                    style:
+                                        AppTheme.theme.textTheme.labelMedium),
+                          ],
                         ),
-                      ),
-                      const SizedBox(
-                        width: 8.0,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("User Name",
-                              style: AppTheme.theme.textTheme.headlineLarge),
-                          Text("Unknown",
-                              style: AppTheme.theme.textTheme.labelMedium),
-                        ],
                       ),
                     ],
                   ),
