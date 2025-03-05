@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as storage;
 import 'package:nodelabs_movie/core/constants/constants.dart';
@@ -21,5 +23,10 @@ abstract class UserServices {
   @POST('/user/register')
   Future<HttpResponse<UserModel>> register({
     @Body() Map<String, dynamic>? userInfo,
+  });
+
+  @POST('/user/upload_photo')
+  Future<HttpResponse<String>> uploadPhoto({
+    @Part(value: 'file') File? photo,
   });
 }

@@ -2,8 +2,11 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nodelabs_movie/config/theme/app_theme.dart';
 import 'package:nodelabs_movie/domain/entities/user_entity.dart';
+import 'package:nodelabs_movie/presentation/blocs/upload_photo/upload_photo_bloc.dart';
+import 'package:nodelabs_movie/presentation/blocs/upload_photo/upload_photo_state.dart';
 import 'package:nodelabs_movie/presentation/pages/photo_screen.dart';
 import 'package:nodelabs_movie/presentation/widgets/discount_card.dart';
 import 'package:nodelabs_movie/presentation/widgets/favorite_movie.dart';
@@ -326,16 +329,27 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
-                          child: user.photoUrl != null
-                              ? CachedNetworkImage(
-                                  imageUrl: user.photoUrl!,
-                                  placeholder: (context, url) =>
-                                      Text(user.name![0]),
-                                  errorWidget: (context, url, error) =>
-                                      const Text('U'),
-                                )
-                              : const Text('U')),
+                      BlocBuilder<UploadPhotoBloc, UploadPhotoState>(
+                        builder: (context, state) {
+                          if (state is UploadPhotoSuccess) {
+                            return user.photoUrl != null
+                                ? CircleAvatar(
+                                    foregroundImage: CachedNetworkImageProvider(
+                                        state.photoUrl!),
+                                    child: Text(user.name![0]))
+                                : CircleAvatar(child: Text(user.name![0]));
+                          }
+                          if (state is UploadPhotoFailed) {
+                            return const CircleAvatar(child: Text('X'));
+                          }
+                          return user.photoUrl != null
+                              ? CircleAvatar(
+                                  foregroundImage: CachedNetworkImageProvider(
+                                      user.photoUrl!),
+                                  child: Text(user.name![0]))
+                              : CircleAvatar(child: Text(user.name![0]));
+                        },
+                      ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.03,
                       ),

@@ -54,4 +54,26 @@ class UserRepositoryImpl implements UserRepository {
       return DataFailed(e);
     }
   }
+
+  @override
+  Future<DataState<String>> uploadPhoto(File? photo) async {
+    try {
+      final httpResponse = await _userServices.uploadPhoto(photo: photo);
+
+      if (httpResponse.response.statusCode == HttpStatus.ok) {
+        return DataSuccess(httpResponse.data);
+      } else {
+        return DataFailed(
+          DioException(
+            error: httpResponse.response.statusMessage,
+            response: httpResponse.response,
+            type: DioExceptionType.badResponse,
+            requestOptions: httpResponse.response.requestOptions,
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return DataFailed(e);
+    }
+  }
 }
