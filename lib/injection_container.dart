@@ -16,6 +16,7 @@ import 'package:nodelabs_movie/presentation/blocs/bottom_navigation/bottom_navig
 import 'package:nodelabs_movie/presentation/blocs/favorite_movies/favorite_movies_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/get_movies/get_movies_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/login/login_bloc.dart';
+import 'package:nodelabs_movie/presentation/blocs/password_visibility/password_visibility_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/register/register_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/upload_photo/upload_photo_bloc.dart';
 
@@ -43,6 +44,8 @@ Future<void> initializeDependencies() async {
   getIt.registerSingleton(GetFavoriteMoviesUseCase(getIt()));
 
   getIt.registerSingleton(GetMoviesUseCase(getIt()));
+
+  getIt.registerFactory<PasswordVisibilityBloc>(() => PasswordVisibilityBloc());
 
   getIt.registerFactory<LoginBloc>(() => LoginBloc(getIt()));
 

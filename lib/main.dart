@@ -4,6 +4,7 @@ import 'package:nodelabs_movie/config/theme/app_theme.dart';
 import 'package:nodelabs_movie/injection_container.dart';
 import 'package:nodelabs_movie/presentation/blocs/get_movies/get_movies_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/login/login_bloc.dart';
+import 'package:nodelabs_movie/presentation/blocs/password_visibility/password_visibility_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/upload_photo/upload_photo_bloc.dart';
 import 'package:nodelabs_movie/presentation/pages/login_screen.dart';
 
@@ -27,7 +28,10 @@ Future<void> main() async {
         debugShowCheckedModeBanner: false,
         title: 'Nodelabs Movie',
         theme: AppTheme.theme,
-        home: LoginScreen(),
+        home: BlocProvider<PasswordVisibilityBloc>(
+          create: (context) => getIt(),
+          child: LoginScreen(),
+        ),
       ),
     ),
   );
