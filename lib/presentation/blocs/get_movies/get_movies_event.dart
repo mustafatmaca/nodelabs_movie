@@ -23,3 +23,5 @@ class IsLastMovie extends GetMoviesEvent {
   @override
   List<Object> get props => [index!];
 }
+
+class RefreshMovies extends GetMoviesEvent {}

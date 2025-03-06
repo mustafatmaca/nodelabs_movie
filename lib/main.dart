@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nodelabs_movie/config/theme/app_theme.dart';
 import 'package:nodelabs_movie/injection_container.dart';
-import 'package:nodelabs_movie/presentation/blocs/get_movies/get_movies_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/login/login_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/password_visibility/password_visibility_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/upload_photo/upload_photo_bloc.dart';
@@ -18,9 +17,6 @@ Future<void> main() async {
           create: (context) => getIt(),
         ),
         BlocProvider<UploadPhotoBloc>(
-          create: (context) => getIt(),
-        ),
-        BlocProvider<GetMoviesBloc>(
           create: (context) => getIt(),
         ),
       ],

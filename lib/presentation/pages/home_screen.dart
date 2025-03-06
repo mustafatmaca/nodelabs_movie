@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nodelabs_movie/config/theme/app_color.dart';
 import 'package:nodelabs_movie/config/theme/app_theme.dart';
+import 'package:nodelabs_movie/injection_container.dart';
+import 'package:nodelabs_movie/presentation/blocs/favorite/favorite_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/get_movies/get_movies_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/get_movies/get_movies_event.dart';
 import 'package:nodelabs_movie/presentation/blocs/get_movies/get_movies_state.dart';
@@ -32,8 +34,11 @@ class HomeScreen extends StatelessWidget {
                 scrollDirection: Axis.vertical,
                 itemCount: state.movies!.length,
                 itemBuilder: (context, index) {
-                  return MovieCard(
-                    movie: state.movies![index],
+                  return BlocProvider<FavoriteBloc>(
+                    create: (context) => getIt(),
+                    child: MovieCard(
+                      movie: state.movies![index],
+                    ),
                   );
                 },
                 onPageChanged: (value) {

@@ -1,7 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nodelabs_movie/config/theme/app_theme.dart';
 import 'package:nodelabs_movie/domain/entities/movie_entity.dart';
+import 'package:nodelabs_movie/presentation/blocs/favorite/favorite_bloc.dart';
+import 'package:nodelabs_movie/presentation/blocs/favorite/favorite_event.dart';
+import 'package:nodelabs_movie/presentation/blocs/favorite/favorite_state.dart';
+import 'package:nodelabs_movie/presentation/blocs/get_movies/get_movies_bloc.dart';
+import 'package:nodelabs_movie/presentation/blocs/get_movies/get_movies_event.dart';
 
 class MovieCard extends StatelessWidget {
   final MovieEntity movie;
@@ -25,19 +31,41 @@ class MovieCard extends StatelessWidget {
         Positioned(
           bottom: 100,
           right: 20,
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.12,
-            height: MediaQuery.of(context).size.height * 0.08,
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white24),
-            ),
-            child: Center(
-              child: Icon(
-                movie.isFavorite == true
-                    ? Icons.favorite
-                    : Icons.favorite_border,
+          child: InkWell(
+            onTap: () {
+              context.read<FavoriteBloc>().add(Favorite(movie.id!));
+              context.read<GetMoviesBloc>().add(RefreshMovies());
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.12,
+              height: MediaQuery.of(context).size.height * 0.08,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.white24),
+              ),
+              child: Center(
+                child: BlocBuilder<FavoriteBloc, FavoriteState>(
+                  builder: (context, state) {
+                    if (state is FavoriteInitial) {
+                      return Icon(
+                        movie.isFavorite == true
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                      );
+                    }
+                    if (state is IsFavorite) {
+                      return Icon(
+                        state.isFavorite == true
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                      );
+                    }
+                    return const Icon(
+                      Icons.favorite_border,
+                    );
+                  },
+                ),
               ),
             ),
           ),

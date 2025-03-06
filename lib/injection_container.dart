@@ -7,12 +7,14 @@ import 'package:nodelabs_movie/data/repository/movie_repository_impl.dart';
 import 'package:nodelabs_movie/data/repository/user_repository_impl.dart';
 import 'package:nodelabs_movie/domain/repository/movie_repository.dart';
 import 'package:nodelabs_movie/domain/repository/user_repository.dart';
+import 'package:nodelabs_movie/domain/usecases/favorite_movie.dart';
 import 'package:nodelabs_movie/domain/usecases/get_favorite_movies.dart';
 import 'package:nodelabs_movie/domain/usecases/get_movies.dart';
 import 'package:nodelabs_movie/domain/usecases/login.dart';
 import 'package:nodelabs_movie/domain/usecases/register.dart';
 import 'package:nodelabs_movie/domain/usecases/upload_photo.dart';
 import 'package:nodelabs_movie/presentation/blocs/bottom_navigation/bottom_navigation_bloc.dart';
+import 'package:nodelabs_movie/presentation/blocs/favorite/favorite_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/favorite_movies/favorite_movies_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/get_movies/get_movies_bloc.dart';
 import 'package:nodelabs_movie/presentation/blocs/login/login_bloc.dart';
@@ -45,6 +47,8 @@ Future<void> initializeDependencies() async {
 
   getIt.registerSingleton(GetMoviesUseCase(getIt()));
 
+  getIt.registerSingleton(FavoriteMovieUseCase(getIt()));
+
   getIt.registerFactory<PasswordVisibilityBloc>(() => PasswordVisibilityBloc());
 
   getIt.registerFactory<LoginBloc>(() => LoginBloc(getIt()));
@@ -56,6 +60,8 @@ Future<void> initializeDependencies() async {
   getIt.registerFactory<FavoriteMoviesBloc>(() => FavoriteMoviesBloc(getIt()));
 
   getIt.registerFactory<GetMoviesBloc>(() => GetMoviesBloc(getIt()));
+
+  getIt.registerFactory<FavoriteBloc>(() => FavoriteBloc(getIt()));
 
   getIt.registerFactory<BottomNavigationBloc>(() => BottomNavigationBloc());
 }

@@ -20,4 +20,9 @@ abstract class MovieServices {
   Future<HttpResponse<List<MovieModel>>> getMovies({
     @Query('page') int? page,
   });
+
+  @POST('/movie/favorite/{favoriteId}')
+  Future<HttpResponse<bool>> favoriteMovie({
+    @Path('favoriteId') String? movieId,
+  });
 }

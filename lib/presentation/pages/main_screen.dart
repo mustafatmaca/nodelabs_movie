@@ -6,6 +6,7 @@ import 'package:nodelabs_movie/presentation/blocs/bottom_navigation/bottom_navig
 import 'package:nodelabs_movie/presentation/blocs/bottom_navigation/bottom_navigation_event.dart';
 import 'package:nodelabs_movie/presentation/blocs/bottom_navigation/bottom_navigation_state.dart';
 import 'package:nodelabs_movie/presentation/blocs/favorite_movies/favorite_movies_bloc.dart';
+import 'package:nodelabs_movie/presentation/blocs/get_movies/get_movies_bloc.dart';
 import 'package:nodelabs_movie/presentation/pages/home_screen.dart';
 import 'package:nodelabs_movie/presentation/pages/profile_screen.dart';
 
@@ -36,7 +37,10 @@ class MainScreen extends StatelessWidget {
             ],
           ),
           body: state.currentIndex == 0
-              ? HomeScreen()
+              ? BlocProvider<GetMoviesBloc>(
+                  create: (context) => getIt(),
+                  child: HomeScreen(),
+                )
               : state.currentIndex == 1
                   ? BlocProvider<FavoriteMoviesBloc>(
                       create: (context) => getIt(),
